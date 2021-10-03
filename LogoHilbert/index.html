@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Computer Graphic - TaskList #1</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+	<!-- Wrapper-->
+		<div id="wrapper">
+
+		<!-- Nav -->
+			<nav id="nav">
+				<a href="#Home" class="icon solid fa-home"><span>Home</span></a>
+				<a href="#Canvas" class="icon solid fa-save"><span>Canvas</span></a>
+				<a href="#SVG" class="icon solid fa-object-ungroup"><span>CSV</span></a>
+			</nav>
+
+		<!-- Main -->
+			<div id="main">
+				
+		<!-- Me -->
+				<article id="Home" class="panel intro">
+					<header>
+						<h1>Marcel Jerzyk</h1>
+						<p>Computer Graphic - TaskList #1</p>
+					</header>
+					<a href="#Hilbert" class="jumplink pic">
+						<span class="arrow icon solid fa-chevron-right"><span>See my Hilbert</span></span>
+						<img src="images/me.jpg" alt="" />
+					</a>
+				</article>
+
+		<!-- Canvas -->
+				<article id="Canvas" class="panel">
+					<header>
+						<h2>Logomotion Online (Turtle Graphic)</h2>
+					</header>
+						<canvas id="myCanvas" width="420" height="420" style="border:1px solid #d3d3d3;">
+								Your browser does not support the HTML5 canvas tag.
+						</canvas>
+						<p id="drawInfo"><i>Pencil: Down</i></p>	
+						<form>
+							<div>
+								<div class="row">
+									<div class="col-6 col-12-medium">
+										<input type="text" name="canvasX" value="420" placeholder="Max X" />
+									</div>
+									<div class="col-6 col-12-medium">
+										<input type="text" name="canvasY" value="420" placeholder="Max Y" />
+									</div>
+									<div class="col-12">
+										<textarea type="text" name="userCmd" value="" placeholder="Command" rows="6"></textarea>
+									</div>
+									<div class="col-6 col-12-medium">
+										<input type="text" name="userHilbertDegree" placeholder="Hilbert Degree (keep it below '10')" />
+									</div>
+									<div class="col-6 col-12-medium">
+										<input type="text"  name="userHilbertStep" placeholder="Hilbert Steps (auto-value fills whole canvas)" />
+									</div>
+								</div>
+							</div>
+							<button type="button" id="userCmdBtn">OK</button> <button type="button" id="userClearCommandline">Clear Commandline</button> <button type="button" id="resizeCanvasBtn">Resize Canvas & Clear</button> <button type="button" id="userHilbertButton">Generate Hilbert</button> 
+						</form>
+
+						<label class="checkBoxTurtleStyle">Draw Turtle Body<input type="checkbox" id="drawTurtleCheckbox" checked="checked"><span class="checkmark"></span></label>
+
+						<h3>Available Commands</h3>
+						<em><ul>
+							<li><b>mv 'num'</b> - moves the turtle</li>
+							<li><b>r 'num'</b> - rotates right with chosen degree</li>
+							<li><b>l 'num'</b> - rotates left with chosen degree</li>
+							<li><b>e ( 'code' ) 'num'</b> - echoes command "num" times</li>
+							<li><b>c</b> - changes color (available: <font color="red">red</font>, <font color="blue">blue</font> , <font color="green">green</font>, <font color="yellow">yellow</font>, <font color="brown">brown</font>, black)</li>
+							<li><b>down</b> - starts drawing</li>
+							<li><b>up</b> - blocks drawing</li>
+						</ul></em>
+					
+						<h3>Drawing Examples</h3>
+						<em><ul>
+							<li><b>Circle:</b> up mv 240 l 90 mv 400 r 90 down e ( mv 3 r 1 ) 360</li>
+							<li><b>House:</b> up mv 100 l 90 down e ( mv 250 r 90 ) 3 up l 270 mv 250 l 45 down c red mv 177 l 90 mv 177 l 45 up mv 40 l 90 mv 40 down c blue e ( mv 50 r 90 ) 4 up mv 125 down e ( mv 50 r 90 ) 4 up mv 85 r 90 mv 180 mv 30 r 90 mv 200 r 90 down c brown mv 100 r 90 mv 50 r 90 mv 100 </li>
+						</ul></em>
+					</article>
+
+			<!-- SVG -->
+					<article id="SVG" class="panel">
+						<header>
+							<h2>Hilberts Curve in SVG</h2>
+						</header>
+						<p><button type="button" id="userHilbertButtonSVG">Generate Hilbert</button>
+						<b>Depth:</b> <input type="range" min="1" max="7" value="3" class="slider" name="hilbertIteration">
+						<b>Steps:</b> <input type="range" min="1" max="20" value="10" class="slider" name="hilbertStepsSlider"><p id="valueSlid">Value: </p></p>
+						
+
+						<div id="divWithSVG">
+						</div>
+					</article>
+
+				</div>
+				<!-- Footer -->
+				<div id="footer">
+					<ul class="copyright">
+						<li>&copy; Marcel Jerzyk.</li></li>
+					</ul>
+				</div>
+			
+			
+		</div>
+		
+	<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+		<script src="assets/js/logo.js"></script>
+		<script src="assets/js/hilbert.js"></script>
+		<script src="assets/js/hilbertsvg.js"></script>
+	</body>
+</html>

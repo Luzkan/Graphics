@@ -1,0 +1,16 @@
+div#minimapcontainer {
+    position: absolute;
+}
+
+canvas#minimap {
+    position : absolute;
+}
+
+canvas#minimapobjects {
+    position : absolute;
+}
+
+canvas#thegame {
+    position : absolute;
+    background: black;
+}

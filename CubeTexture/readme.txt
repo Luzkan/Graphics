@@ -1,0 +1,2 @@
+cmd:
+>http-server

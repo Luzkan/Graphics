@@ -1,0 +1,34 @@
+@import url("color-picker.min.css");
+
+label {
+    text-align: center;
+}
+
+.up-down{
+    width: 125px;
+}
+
+
+canvas {
+    border: 1px solid black;
+}
+
+.control {
+    display: flex;
+}
+
+.control > input {
+    margin: 8px;
+    text-align: center;
+}
+
+input {
+	padding: 8px 16px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	margin-bottom: 5px;
+}
+
+.mainSite {
+	padding: 2% 25% 20% 25%;
+}

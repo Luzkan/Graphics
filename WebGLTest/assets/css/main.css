@@ -1,0 +1,21 @@
+input {
+	padding: 8px 16px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	margin-bottom: 5px;
+}
+
+
+.mainSite {
+	padding: 2% 25% 20% 25%;
+}
+
+.canvasBlock {
+    width: 200px;
+    display: flex;
+    flex-flow: column;
+}
+
+nav > p {
+    text-align: center;
+}

@@ -1,0 +1,477 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" href="assets/css/main.css" />
+</head>
+	<body>
+		<div>
+			<!-- <form>
+				Max X: <input type="number" name="canvasX" value="420"><br>
+				Max Y: <input type="number" name="canvasY" value="420"><br>
+				<button id="resizeCanvasBtn">Resize Canvas & Clear</button>
+			</form> -->
+	
+			<p>Command: <input type="text" name="userCmd" size="70" value=""></input> <button id="userCmdBtn">OK</button> </p>
+			<p id="drawInfo">Pencil: Down</p>  
+			<!-- <input type="checkbox" id="drawTurtleCheckbox">Draw Turtle Body</button> -->
+	
+			<!-- <h2>Available Commands</h2>
+			<ul><code>
+				<li>mv 'num' - moves the turtle</li>
+				<li>r 'num' - rotates right with chosen degree</li>
+				<li>l 'num' - rotates left with chosen degree</li>
+				<li>e ( 'code' ) 'num' - echoes command "num" times</li>
+				<li>c - changes color (available: <font color="red">red</font>, <font color="blue">blue</font> , <font color="green">green</font>, <font color="yellow">yellow</font>, <font color="brown">brown</font>, black)</li>
+				<li>down - starts drawing</li>
+				<li>up - blocks drawing</li>
+				</code>
+			</ul> -->
+	
+		</div>  
+
+		<canvas id="cnv" width="800" height="600"></canvas>
+		<!-- <script src="assets/js/scripts.js"></script> -->
+		<script src="assets/js/rotation.js"></script> 
+		<script>
+
+		var Vertex = function(x, y, z) {
+			this.x = parseFloat(x);
+			this.y = parseFloat(y);
+			this.z = parseFloat(z);
+		};
+
+		var Vertex2D = function(x, y) {
+			this.x = parseFloat(x);
+			this.y = parseFloat(y);
+		};
+
+		var Cube = function(center, side) {
+			// Generate the vertices
+			// var d = side / 2;
+			// Cube is 600x600x600
+			var d = 300;
+
+			this.vertices = [
+				new Vertex(center.x - d, center.y - d, center.z + d),
+				new Vertex(center.x - d, center.y - d, center.z - d),
+				new Vertex(center.x + d, center.y - d, center.z - d),
+				new Vertex(center.x + d, center.y - d, center.z + d),
+				new Vertex(center.x + d, center.y + d, center.z + d),
+				new Vertex(center.x + d, center.y + d, center.z - d),
+				new Vertex(center.x - d, center.y + d, center.z - d),
+				new Vertex(center.x - d, center.y + d, center.z + d),
+			];
+
+			// Generate the faces
+			this.faces = [
+				[this.vertices[0], this.vertices[1], this.vertices[2], this.vertices[3]],
+				[this.vertices[3], this.vertices[2], this.vertices[5], this.vertices[4]],
+				[this.vertices[4], this.vertices[5], this.vertices[6], this.vertices[7]],
+				[this.vertices[7], this.vertices[6], this.vertices[1], this.vertices[0]],
+				[this.vertices[7], this.vertices[0], this.vertices[3], this.vertices[4]],
+				[this.vertices[1], this.vertices[6], this.vertices[5], this.vertices[2]],
+			];
+
+			// Colors
+			this.color = [
+				"white",
+				"white",
+				"white",
+				"white",
+				"white",
+				"white",	
+			]
+		};
+
+		function project(M) {
+			// Distance between the camera and the plane
+			var d = 0.3;
+			var rW = (d*innerWidth) / (M.y);
+			var rH = (d*innerHeight) / (M.y);
+
+			return new Vertex2D(rH * M.x, rH * M.z);
+		}
+
+		function add(v0,v1){
+			return {x : v0.x+v1.x, y : v0.y+v1.y, z : v0.z+v1.z}
+		}
+
+		function render(objects, ctx, dx, dy, camP) {		
+
+			// Clear the previous frame
+			ctx.clearRect(0, 0, 2*dx, 2*dy);
+
+			// For each object
+			for (var i = 0, n_obj = objects.length; i < n_obj; ++i) {
+				// For each face
+				for (var j = 0, n_faces = objects[i].faces.length; j < n_faces; ++j) {
+					// Current face
+					var face = objects[i].faces[j];
+
+					// Draw the first vertex
+					var P = project(add(face[0], camP));
+					var test = face[0].z + camP.z
+					ctx.beginPath();
+					ctx.moveTo(P.x + dx, -P.y + dy);
+
+					// Draw the other vertices
+					for (var k = 1, n_vertices = face.length; k < n_vertices; ++k) {
+						P = project(add(face[k], camP));
+						ctx.lineTo(P.x + dx, -P.y + dy);
+					}
+					var colorDesired = objects[i].color[j]
+					ctx.strokeStyle=colorDesired;
+					// Close the path and draw the face
+					ctx.closePath();
+					ctx.stroke();
+					// ctx.fill();
+				}
+			}
+		}
+
+		(function() {
+			// Fix the canvas width and height
+
+			var canvas = document.getElementById('cnv');
+			canvas.width = innerWidth;
+			canvas.height = innerHeight;
+			var dx = canvas.width / 2;
+			var dy = canvas.height / 2;
+			var fov = innerWidth / 2;
+			var camP = {x : 0, y : 300, z : 0};
+
+			// Objects style
+			var ctx = canvas.getContext('2d');
+			ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+			ctx.fillStyle = 'rgba(0, 150, 255, 0.3)';
+
+			// Create the cube
+			var cube_center = new Vertex(0, 11*dy/10, 0);
+			var cube_right = new Vertex(600, 11*dy/10, 0);
+			var cube = new Cube(cube_center, dy);
+			// var cube2 = new Cube(cube_right, dy);
+			var objects = [cube];
+
+			// First render
+			render(objects, ctx, dx, dy, camP);
+
+			// Events
+			var mousedown = false;
+			var mx = 0;
+			var my = 0;
+
+			canvas.addEventListener('mousedown', initMove);
+			document.addEventListener('mousemove', move);
+			document.addEventListener('mouseup', stopMove);
+
+			// Rotate a vertice
+			function rotate(M, center, theta, phi) {
+				// Rotation matrix coefficients
+				var ct = Math.cos(theta);
+				var st = Math.sin(theta);
+				var cp = Math.cos(phi);
+				var sp = Math.sin(phi);
+
+				// Rotation
+				var x = M.x - center.x;
+				var y = M.y - center.y;
+				var z = M.z - center.z;
+
+				M.x = ct * x - st * cp * y + st * sp * z + center.x;
+				M.y = st * x + ct * cp * y - ct * sp * z + center.y;
+				M.z = sp * y + cp * z + center.z;
+			}
+
+			function rotateTurtleRot(newPos, rot, center, theta, phi) {
+				// Rotation matrix coefficients
+				var ct = Math.cos(theta);
+				var st = Math.sin(theta);
+				var cp = Math.cos(phi);
+				var sp = Math.sin(phi);
+
+				var v1 = {x: cube.vertices[cube.vertices.length-2].x, y: cube.vertices[cube.vertices.length-2].y, z: cube.vertices[cube.vertices.length-2].z}
+				var v2 = {x: cube.vertices[cube.vertices.length-1].x, y: cube.vertices[cube.vertices.length-1].y, z: cube.vertices[cube.vertices.length-1].z}
+
+				var newRotation = please(v1, v2);
+
+				rot.horiz = radians_to_degrees(newRotation.rotX);
+				rot.verti = radians_to_degrees(newRotation.rotZ);
+
+				console.log(rot.horiz);
+				console.log(rot.verti);
+				console.log(radians_to_degrees(newRotation.rotY));
+
+				// M.horiz -= 0;
+				// M.verti -= 0;			
+			}
+
+			// Initialize the movement
+			function initMove(evt) {
+				// clearTimeout(autorotate_timeout);
+				mousedown = true;
+				mx = evt.clientX;
+				my = evt.clientY;
+			}
+
+			function move(evt) {
+				if (mousedown) {
+					var theta = (evt.clientX - mx) * Math.PI / 360;
+					var phi = (evt.clientY - my) * Math.PI / 180;
+
+					for (var i = 0; i < cube.vertices.length; ++i)
+						rotate(cube.vertices[i], cube_center, theta, phi);
+
+					// Rotate the Turtle too
+					rotate(turtlePos, cube_center, theta, phi);
+					// Turtle Rotation is independent from drawing rotation
+					// rotateTurtleRot(turtlePos, turtleRot, cube_center, theta, phi);
+
+					mx = evt.clientX;
+					my = evt.clientY;
+
+					render(objects, ctx, dx, dy, camP);
+				}
+			}
+
+			function stopMove() {
+				mousedown = false;
+				autorotate_timeout = setTimeout(autorotate, 2000);
+			}
+
+			function autorotate() {
+			// 	for (var i = 0; i < cube.vertices.length; ++i)
+			// 	    rotate(cube.vertices[i], cube_center, -Math.PI / 720, Math.PI / 720);
+
+			// 	render(objects, ctx, dx, dy);
+
+			// 	autorotate_timeout = setTimeout(autorotate, 30);
+			}
+			// autorotate_timeout = setTimeout(autorotate, 2000);
+			
+
+			// Movement
+			// document.onkeydown = function(event) {
+			// 	console.log(event.keyCode);
+			// 	switch (event.keyCode) {
+			// 	case 65:		// A
+			// 		console.log('A pressed');
+			// 		moveAss("left");
+			// 		break;
+			// 	case 87:		// W
+			// 		console.log('W pressed');
+			// 		moveAss("up");
+			// 		break;
+			// 	case 68:		// D
+			// 		console.log('D pressed');
+			// 		moveAss("right");
+			// 		break;
+			// 	case 83:		// S
+			// 		console.log('S pressed');
+			// 		moveAss("down");
+			// 		break;
+			// 	}
+			// 	render(objects, ctx, dx, dy, camP);
+			// };
+
+			// function moveAss(direction){
+			// 	switch(direction){
+			// 	case "left":
+			// 		for (var i = 0; i < cube.vertices.length; ++i) {
+			// 			cube.vertices[i].x -= 50;
+			// 			cube.vertices[i].y += 0;
+			// 			cube.vertices[i].z += 0;
+			// 		}
+			// 		break;
+			// 	case "right":
+			// 		for (var i = 0; i < cube.vertices.length; ++i) {
+			// 			cube.vertices[i].x += 50;
+			// 			cube.vertices[i].y += 0;
+			// 			cube.vertices[i].z += 0;
+			// 		}
+			// 		break;
+			// 	case "up":
+			// 		for (var i = 0; i < cube.vertices.length; ++i) {
+			// 			cube.vertices[i].x -= 0;
+			// 			cube.vertices[i].y -= 0;
+			// 			cube.vertices[i].z += 50;
+			// 		}
+			// 		break;
+			// 	case "down":
+			// 		for (var i = 0; i < cube.vertices.length; ++i) {
+			// 			cube.vertices[i].x -= 0;
+			// 			cube.vertices[i].y -= 0;
+			// 			cube.vertices[i].z -= 50;
+			// 		}
+			// 		break;
+			// 	}
+			// }
+
+			// -------------------------------------------------------------------------------
+
+			let drawWithTurtle = true;
+			let drawTurtleBody = false;
+
+			// Starting Turtle position
+			var turtlePos = {x : -300+camP.x, y : 707.85+camP.y, z : 300+camP.z};
+			let turtleRot = {horiz : 0, verti : 0};
+			let turtleCol = "red";
+
+			// OK Button
+			document.getElementById("userCmdBtn").addEventListener("click", function(event){
+				let usercmd = document.querySelector('input[name="userCmd"]').value;
+				console.log(usercmd.split(" "));   
+				cmdHandler(usercmd.split(" "));         
+			});
+
+			// Command Handler
+			function cmdHandler(usercmd){
+				for (let i = 0; i < usercmd.length;) {
+					switch(usercmd[i]) {
+						case "mv":
+							let move = Number((usercmd[i + 1]));
+							startDraw(move);
+							i += 2;
+							break;
+						case 'r':
+							let rotateRight = Number((usercmd[i + 1]));
+							console.log("Horizontal rotation changed from: " + turtleRot.horiz + " to: " + (turtleRot.horiz + rotateRight));
+							turtleRot.horiz += rotateRight;
+							i += 2;
+							break;
+						case 'l':
+							let rotateLeft = Number((usercmd[i + 1]));
+							console.log("Horizontal rotation changed from: " + turtleRot.horiz + " to: " + (turtleRot.horiz - rotateLeft));
+							turtleRot.horiz -= rotateLeft;
+							i += 2;
+							break;
+						case 'u':
+							let rotateUp = Number((usercmd[i + 1]));
+							console.log("Vertical rotation changed from: " + turtleRot.verti + " to: " + (turtleRot.verti + rotateUp));
+							turtleRot.verti += rotateUp;
+							i += 2;
+							break;
+						case 'd':
+							let rotateDown = Number((usercmd[i + 1]));
+							console.log("Vertical rotation changed from: " + turtleRot.verti + " to: " + (turtleRot.verti - rotateDown));
+							turtleRot.verti -= rotateDown;
+							i += 2;
+							break;
+						case 'e':
+
+							console.log("Usercmd: " + usercmd);
+
+							// Repeat looks up for the ")" that implies end of repeating code
+							// ErrCheck looks if there was another "(" that implies more echoing code
+							// We need to find the last ")" in order to echo the code correctly
+
+							let repeat = usercmd.slice(i, usercmd.length).indexOf(")");
+							let errCheck = usercmd.slice(i, usercmd.length).indexOf("(", 2);
+							let toEcho = usercmd.slice(i+2, (i+repeat+2));
+
+							console.log("i: " + i + " repeat: " + repeat);
+							console.log("ErrCheck Index: " + errCheck);
+							console.log("ToEcho: " + toEcho);
+
+							while(errCheck != -1 && errCheck < repeat){
+								repeat = usercmd.slice(i, usercmd.length).indexOf(")", (repeat+1));
+								errCheck = usercmd.slice(i, usercmd.length).indexOf("(", (errCheck+1));
+								toEcho = usercmd.slice((i+2), (repeat));
+								console.log(repeat);
+								console.log(toEcho);
+							}
+
+							for (let k = 0; k < usercmd[i + repeat + 1]; k++){
+								cmdHandler(toEcho);
+							}
+
+							i += (repeat + 2);
+							break;
+						case 'c':
+							let colorPicked = String((usercmd[i + 1]));
+							pickColor(colorPicked);
+							i += 2;
+							break;
+						case 'down':
+							drawWithTurtle = true;
+							document.getElementById("drawInfo").innerHTML = "Pencil: Down";
+							i += 1;
+							break;
+						case 'up':
+							drawWithTurtle = false;
+							document.getElementById("drawInfo").innerHTML = "Pencil: Up";
+							i += 1;
+							break;
+						default:
+							console.log("Not a command: " + usercmd[i]);
+							i += 1;
+							break;
+					}
+				}
+			}
+
+			// Drawing utility
+			function startDraw(move, d){
+
+				turtlePos.x += move*Math.cos(toRadian(turtleRot.horiz))*Math.cos(toRadian(turtleRot.verti));
+				turtlePos.y += move*Math.sin(toRadian(turtleRot.horiz))*Math.cos(toRadian(turtleRot.verti));
+				turtlePos.z += move*Math.sin(toRadian(turtleRot.verti));
+				cube.vertices.push(new Vertex(turtlePos.x, turtlePos.y, turtlePos.z));
+				
+				if(drawWithTurtle){
+					cube.faces.push([cube.vertices[cube.vertices.length-2], cube.vertices[cube.vertices.length-1]]);
+					cube.color.push(turtleCol);
+				}
+
+				console.log(turtlePos);
+				console.log(turtleRot);
+
+				render(objects, ctx, dx, dy, camP);
+			}
+
+			function toRadian(degrees){
+				var pi = Math.PI;
+				return degrees * (pi/180);
+			}
+
+			function radians_to_degrees(radians){
+				var pi = Math.PI;
+				return radians * (180/pi);
+			}
+
+			function pickColor(newColor){
+				switch(newColor) {
+					case "red":
+						console.log("Picked color: " + newColor + ". Previous color: " + turtleCol);
+						turtleCol = "rgb(255, 0, 0)";
+						break;
+					case "blue":
+						console.log("Picked color: " + newColor + ". Previous color: " + turtleCol);
+						turtleCol = "rgb(0, 0, 255)";
+						break;
+					case "yellow":
+						console.log("Picked color: " + newColor + ". Previous color: " + turtleCol);
+						turtleCol = "rgb(255, 255, 0)";
+						break;
+					case "green":
+						console.log("Picked color: " + newColor + ". Previous color: " + turtleCol);
+						turtleCol = "rgb(0, 255, 0)";
+						break;
+					case "brown":
+						console.log("Picked color: " + newColor + ". Previous color: " + turtleCol);
+						turtleCol = "rgb(160,82,45)";
+						break;
+					case "white":
+						console.log("Picked color: " + newColor + ". Previous color: " + turtleCol);
+						turtleCol = "rgb(255, 255, 255)";
+						break;
+					default:
+						console.log("Color " + newColor + " is not defined!");
+						break;
+				}
+			}
+
+		})();
+
+		</script>
+	</body>
+</html>

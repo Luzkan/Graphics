@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Draw Graph in GL</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="assets/images/icons/favicon.ico"/>
+	<link rel="stylesheet" type="text/css" href="assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/util.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
+</head>
+<body style="background-color: #999999;">
+	<div class="limiter">
+		<div class="container-login100">
+			<div id="cnvsdiv" class="login100-more"><canvas id='canvas'>
+				Your browser doesn't support canvas element.
+			</canvas></div>
+			<div class="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">
+				<form class="login100-form validate-form">
+					<span class="login100-form-title p-b-59">
+						Graph GL
+					</span>
+
+					<div class="wrap-input100 validate-input" data-validate="Dimension is required">
+						<span class="label-input100">R^2:</span>
+						<input id="diminput" class="input100" type="text" name="dimension" value="(x, y)" placeholder="(x, y)">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate = "Valid function is required">
+						<span class="label-input100">Equation</span>
+						<input id="equinput" class="input100" type="text" name="equation" value="Math.cos(x*2 + y/2)" placeholder="x*(y+2)">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input">
+						<span class="label-input100">Color</span>
+						<input id="colorinput" class="input100" type="text" name="color" placeholder="Purple">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Range X is required">
+						<span class="label-input100">X Range</span>
+						<input id="xrninput" class="input100" type="text" name="username" value="[-4, 4]" placeholder="[-10, 10]">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Range Y is required">
+						<span class="label-input100">Y Range</span>
+						<input id="yrninput" class="input100" type="text" name="username" value="[-6, 6]" placeholder="[-12, 8]">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="flex-m w-full p-b-33">
+						<div class="contact100-form-checkbox">
+							<input class="input-checkbox100" id="ckb1" type="checkbox" onclick="changeDraw(1)" name="points">
+							<label class="label-checkbox100" for="ckb1">
+								<span class="txt1">
+									Use
+									<a href="#" class="txt2 hov1">
+										Points
+									</a>
+								</span>
+							</label>
+						</div>
+					</div>
+
+					<div class="flex-m w-full p-b-33">
+						<div class="contact100-form-checkbox">
+							<input class="input-checkbox100" id="ckb2" type="checkbox" onclick="changeDraw(2)" name="fog">
+							<label class="label-checkbox100" for="ckb2">
+								<span class="txt1">
+									Use
+									<a href="#" class="txt2 hov1">
+										Fog
+									</a>
+								</span>
+							</label>
+						</div>
+					</div>
+
+					<div class="flex-m w-full p-b-33">
+						<div class="contact100-form-checkbox">
+							<input class="input-checkbox100" id="ckb3" type="checkbox" onclick="changeDraw(3)" name="lightning" checked>
+							<label class="label-checkbox100" for="ckb3">
+								<span class="txt1">
+									Use
+									<a href="#" class="txt2 hov1">
+										Lightning
+									</a>
+								</span>
+							</label>
+						</div>
+					</div>
+
+					<div class="flex-m w-full p-b-33">
+						<div class="contact100-form-checkbox">
+							<input class="input-checkbox100" id="ckb4" type="checkbox" onclick="trianglesUsage()" name="triangles">
+							<label class="label-checkbox100" for="ckb4">
+								<span class="txt1">
+									Use
+									<a href="#" class="txt2 hov1">
+										Triangles
+									</a>
+								</span>
+							</label>
+						</div>
+					</div>
+
+					<div class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<div class="login100-form-bgbtn"></div>
+							<button id="drawbtn" class="login100-form-btn">
+								Draw
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script src="assets/js/jquery-3.2.1.min.js"></script>
+	<script src="assets/js/looks.js"></script>
+	<script src="assets/js/shaders.js"></script>
+	<script src="assets/js/main.js"></script>
+	<script src="assets/js/points.js"></script> 
+	<script src="assets/js/fog.js"></script> 
+	<script src="assets/js/lightning.js"></script>
+</body>
+</html>

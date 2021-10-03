@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="assets/css/main.css">
+    </head>
+    <body onload="InitDemo();" class="mainSite">
+        <canvas width="800" height="600"></canvas>
+        <br />
+        <label> Depth: <input id="level" type="number" value="3" min="1" max="10"></label>
+        <button id="add">Draw Hilbert</button> 
+        <p><input type="text" class="colorPicker" id="colorPicker"> (copy and paste it into the input field for desired Hilbert, tip: use only far right values)</p>
+        <div id="drawedHilbertsOptions"></div>
+        <script src="assets/js/hilbert.js"></script>
+        <script src="assets/js/color-picker.min.js"></script>
+        
+        <script>
+        var picker = new CP(document.getElementById('colorPicker'));
+        picker.on("change", function(color) {
+            this.source.value = '#' + color;
+        });        
+        </script>
+    </body>
+</html>
+
+
+
+

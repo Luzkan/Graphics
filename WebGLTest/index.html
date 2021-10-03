@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="assets/css/main.css"/>
+</head>
+<body onload="InitDemo();">    
+    <div class="mainSite">
+        <canvas id="myCanvas" width="900" height="800" style="border:1px solid #d3d3d3;">
+            Your browser does not support the HTML5 canvas tag.
+        </canvas>
+
+        <div id="drawTypeButtons">
+            <p id="current">Drawing with method: Points</p>
+            <button id="Points">Points</button>
+            <button id="Line_Strip">Line Strip</button>
+            <button id="Line_Loop">Line Loop</button>
+            <button id="Lines">Lines</button>
+            <button id="Triangle_Strip">Triangle Strip</button>
+            <button id="Triangle_Fan">Triangle Fan</button>
+            <button id="Triangles">Triangles</button>
+        </div>
+
+        <form>
+            Max X: <input type="number" name="canvasX" value="800"><br>
+            Max Y: <input type="number" name="canvasY" value="600"><br>
+            <button id="resizeCanvasBtn">Resize Canvas & Clear (uncoded, not working)</button>
+        </form>
+
+
+
+        <!-- <p>Command: <input type="text" name="userCmd" size="70" value=""></input> <button id="userCmdBtn">OK</button> </p> -->
+        <!-- <p id="drawInfo">Pencil: Down</p>  
+        <input type="checkbox" id="drawTurtleCheckbox">Draw Turtle Body</button> -->
+
+
+        <!-- <h2>Available Commands</h2>
+        <ul><code>
+            <li>mv 'num' - moves the turtle</li>
+            <li>r 'num' - rotates right with chosen degree</li>
+            <li>l 'num' - rotates left with chosen degree</li>
+            <li>e ( 'code' ) 'num' - echoes command "num" times</li>
+            <li>c - changes color (available: <font color="red">red</font>, <font color="blue">blue</font> , <font color="green">green</font>, <font color="yellow">yellow</font>, <font color="brown">brown</font>, black)</li>
+            <li>down - starts drawing</li>
+            <li>up - blocks drawing</li>
+            <li>0.2, 0.5, 1.0, 1.0, 0.0, -0.5, -0.5, 0.7, 0.0, 1.0, 0.5, -0.5, 0.1, 1.0, 0.6,</li>
+            </code>
+        </ul>
+
+        <h2>Examples</h2>
+        <ul><code>
+            <li>Circle: up mv 240 l 90 mv 400 r 90 down e ( mv 3 r 1 ) 360</li>
+            <li>House: up mv 100 l 90 down e ( mv 250 r 90 ) 3 up l 270 mv 250 l 45 down c red mv 177 l 90 mv 177 l 45 up mv 40 l 90 mv 40 down c blue e ( mv 50 r 90 ) 4 up mv 125 down e ( mv 50 r 90 ) 4 up mv 85 r 90 mv 180 mv 30 r 90 mv 200 r 90 down c brown mv 100 r 90 mv 50 r 90 mv 100 </li>
+        </code></ul>
+
+        <h2>Hilberts Curve</h2>
+        <p>Degree: <input type="text" name="userHilbertDegree" value="3"></input> - keep below "10".</p>
+        <p>Step: <input type="text" name="userHilbertStep" value="60"></input></p>
+        <button id="userHilbertButton">Generate Hilbert</button> -->
+    </div>  
+    
+    <script src="assets/js/gl-matrix.js"></script>
+    <script src="assets/js/webgl.js"></script>
+</body>
+</html>
